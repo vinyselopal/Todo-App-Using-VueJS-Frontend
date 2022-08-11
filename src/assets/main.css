@@ -1,4 +1,4 @@
-@import 'variables.css';
+@import 'base.css';
 * {
     color: var(--color-font);
     font-size: 25px;
@@ -21,7 +21,7 @@ h1 {
 .title {
     text-align: center;
 }
-#addTodoBar {
+.addTodoBar {
     border: 1px solid var(--color-border);
     margin: auto;
     margin-top: 20px;
@@ -78,7 +78,7 @@ ul li .visible{
     color: var(--color-border)
 
 }
-.savedTask {
+.savedTodo {
     margin: 0;
     padding: 10px;
     overflow: hidden;
@@ -92,7 +92,7 @@ ul li .visible{
     background-color: white;
 }
 
-.strike {
+.done {
     display: inline-block;
     height: 39.5px;
     width: 39.5px;
@@ -139,16 +139,6 @@ ul li .visible{
     flex: 2
 }
 
-/* .doneTodoFooter {
-    background-color: white;
-    display: inline
-}
-
-.allTodoFooter {
-    background-color: black;
-    display: inline
-} */
-
 .footerDiv {
     position: fixed;
     display: flex;
@@ -189,7 +179,7 @@ ul li .visible{
     align-items: center;
 }
 
-.expandTodoButton {
+.expandButton {
     height: 100%;
     margin-right: 10px;
     height: 36px;
