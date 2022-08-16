@@ -8,7 +8,7 @@
         v-model="content"
       />
     </p>
-    <input type="checkbox" class="done" :checked="done" />
+    <input type="checkbox" class="done" v-model="done" @change="emitDone" />
     <button class="expandButton" @click="expand">v</button>
   </div>
 
@@ -29,7 +29,7 @@
 </template>
 <script>
 export default {
-  emits: ["delete-todo", "edit-todo-text"],
+  emits: ["delete-todo", "edit-todo-text", "update-done"],
   data() {
     return {
       expanded: false,
@@ -59,6 +59,10 @@ export default {
       const var1 = event.target.value;
       this.todoContent = var1;
       this.$emit("edit-todo-text", var1);
+    },
+    emitDone() {
+      console.log(this.done, 'there');
+      this.$emit("update-done", this.id, this.done);
     },
   },
 };

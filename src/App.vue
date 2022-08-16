@@ -1,11 +1,12 @@
 <script>
 import ToDoItem from "./components/todoItem.vue";
 import uniqueId from "lodash.uniqueid";
+import ToDoFooter from './components/todoFooter.vue';
 
 export default {
   name: "app",
   components: {
-    ToDoItem,
+    ToDoItem, ToDoFooter
   },
   data() {
     return {
@@ -28,10 +29,39 @@ export default {
       }
     },
     todoDeleted(id) {
-            const itemIndex = this.tasks.findIndex(item => item.id === id);
+            const itemIndex = this.tasks.findIndex(item => item.id === id); // why error with filter on proxy
             this.tasks.splice(itemIndex, 1)
 
     },
+    clearedAll() {
+      this.tasks = []
+    },
+    countDone() {
+      let count = 0
+      this.tasks.forEach(a => {
+        if(a.done) count++
+      })
+      return count
+    },
+    clearedDone() {
+              console.log(this.tasks[0])
+      const length =  this.tasks.length
+      while (this.countDone()) {
+      for (let i = 0; i <= length; i++) {
+        const task = this.tasks[i]
+        if (task === undefined) break
+        console.log(this.tasks)
+        if(task.done) {
+          const itemIndex = this.tasks.findIndex(item => item.id === task.id); // why error with filter on proxy
+          this.tasks.splice(itemIndex, 1)
+        }
+      }
+      }
+    },
+    doneUpdated(id, done) {
+      const itemIndex = this.tasks.findIndex(item => item.id === id);
+      this.tasks[itemIndex].done = done
+    }
   },
 };
 </script>
@@ -55,6 +85,7 @@ export default {
             this.tasks[index].content = value;
           }
         "
+        @update-done="doneUpdated"
       ></to-do-item>
     </li>
   </ul>
@@ -67,12 +98,7 @@ export default {
       placeholder="type in"
     />
   </div>
-  <footer class="footer">
-    <div class="footerDiv">
-    <input type="button" value="clearAll" class="clearAll">
-    <input type="button" value="clearDone" class="clearDone">
-    </div>
-  </footer>
+  <to-do-footer class="footer" @clear-all="clearedAll" @clear-done="clearedDone"></to-do-footer>
 
 </template>
 
