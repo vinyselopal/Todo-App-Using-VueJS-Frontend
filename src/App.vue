@@ -1,5 +1,7 @@
 <script>
-import ToDoItem from "./src/components/todoItem.vue";
+import ToDoItem from "./components/todoItem.vue";
+import uniqueId from "lodash.uniqueid";
+
 export default {
   name: "app",
   components: {
@@ -20,20 +22,23 @@ export default {
           priority: 0,
           notes: "",
           date: "",
+          id: uniqueId("todo-"),
         });
         this.todoContent = "";
       }
     },
-    todoDeleted(index) {
-      this.tasks.splice(index, 1)
-    }
+    todoDeleted(id) {
+            const itemIndex = this.tasks.findIndex(item => item.id === id);
+            this.tasks.splice(itemIndex, 1)
+            
+    },
   },
 };
 </script>
 
 <template>
   <header class="title">
-    <h1>VUEDOO</h1>
+    <h1>To-Do with Vue</h1>
   </header>
   <ul>
     <li v-for="(task, index) in tasks">
@@ -44,7 +49,12 @@ export default {
         :notes="task.notes"
         :date="task.date"
         :id="task.id"
-        @delete-todo="todo-deleted(index)"
+        @delete-todo="todoDeleted"
+        @edit-todo-text="
+          (value) => {
+            this.tasks[index].content = value;
+          }
+        "
       ></to-do-item>
     </li>
   </ul>

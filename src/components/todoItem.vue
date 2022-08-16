@@ -1,9 +1,12 @@
 <template>
   <div class="visible">
     <p class="savedTodo">
-      <text :class="{ taskCompletion: isDone(index), todoContentBar: true }">{{
-        content
-      }}</text>
+      <input
+        type="text"
+        :class="{ /*taskCompletion: isDone(index),*/ todoContentBar: true }"
+        @change="onTextEdit"
+        v-model="content"
+      />
     </p>
     <input type="checkbox" class="done" :checked="done" />
     <button class="expandButton" @click="expand">v</button>
@@ -26,8 +29,10 @@
 </template>
 <script>
 export default {
+  emits: ["delete-todo", "edit-todo-text"],
   data() {
     return {
+      expanded: false,
       todoContent: this.content,
       doneStatus: this.done,
       selectedPriority: this.priority,
@@ -38,18 +43,22 @@ export default {
   props: {
     content: { required: true, type: String },
     done: { default: false, type: Boolean },
-    priority: { default: 0, type: Integer },
+    priority: { default: 0, type: Number },
     notes: { default: "", type: String },
     date: { default: "", type: String },
-    expanded: { default: false, type: Boolean },
-    id: {required: true, type: String}
+    id: { required: true, type: String },
   },
   methods: {
     expand() {
       this.expanded = !this.expanded;
     },
     deleteTodo() {
-      this.$emit("todo-deleted", this.id);
+      this.$emit("delete-todo", this.id);
+    },
+    onTextEdit(event) {
+      const var1 = event.target.value;
+      this.todoContent = var1;
+      this.$emit("edit-todo-text", var1);
     },
   },
 };
