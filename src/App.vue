@@ -30,7 +30,7 @@ export default {
     todoDeleted(id) {
             const itemIndex = this.tasks.findIndex(item => item.id === id);
             this.tasks.splice(itemIndex, 1)
-            
+
     },
   },
 };
@@ -67,6 +67,13 @@ export default {
       placeholder="type in"
     />
   </div>
+  <footer class="footer">
+    <div class="footerDiv">
+    <input type="button" value="clearAll" class="clearAll">
+    <input type="button" value="clearDone" class="clearDone">
+    </div>
+  </footer>
+
 </template>
 
 <style></style>

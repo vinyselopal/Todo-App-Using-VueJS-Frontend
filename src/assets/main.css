@@ -111,7 +111,8 @@ ul li .visible{
     border-radius: 30px;
     padding: 20px;
     justify-content: stretch;
-    gap: 20px
+    gap: 20px;
+    display: flex
 }
 
 .notes {
