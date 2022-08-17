@@ -12,7 +12,7 @@
     <button class="expandButton" @click="expand">v</button>
   </div>
 
-  <div class="hidden" v-if="this.expanded">
+  <div class="hidden" v-if="expanded">
     <div class="leftHidden">
       <textarea class="notes">{{ notes }}</textarea>
     </div>
@@ -29,10 +29,9 @@
 </template>
 <script>
 export default {
-  emits: ["delete-todo", "edit-todo-text", "update-done"],
+  emits: ["delete-todo", "edit-todo-text", "update-done", "expand"],
   data() {
     return {
-      expanded: false,
       todoContent: this.content,
       doneStatus: this.done,
       selectedPriority: this.priority,
@@ -47,10 +46,11 @@ export default {
     notes: { default: "", type: String },
     date: { default: "", type: String },
     id: { required: true, type: String },
+    expanded: {default: false, type: Boolean}
   },
   methods: {
     expand() {
-      this.expanded = !this.expanded;
+      this.$emit('expand', this.id, this.expanded)
     },
     deleteTodo() {
       this.$emit("delete-todo", this.id);
@@ -61,7 +61,6 @@ export default {
       this.$emit("edit-todo-text", var1);
     },
     emitDone() {
-      console.log(this.done, 'there');
       this.$emit("update-done", this.id, this.done);
     },
   },

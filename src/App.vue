@@ -1,12 +1,13 @@
 <script>
 import ToDoItem from "./components/todoItem.vue";
 import uniqueId from "lodash.uniqueid";
-import ToDoFooter from './components/todoFooter.vue';
+import ToDoFooter from "./components/todoFooter.vue";
 
 export default {
   name: "app",
   components: {
-    ToDoItem, ToDoFooter
+    ToDoItem,
+    ToDoFooter,
   },
   data() {
     return {
@@ -24,45 +25,53 @@ export default {
           notes: "",
           date: "",
           id: uniqueId("todo-"),
+          expanded: false
         });
         this.todoContent = "";
       }
     },
     todoDeleted(id) {
-            const itemIndex = this.tasks.findIndex(item => item.id === id); // why error with filter on proxy
-            this.tasks.splice(itemIndex, 1)
-
+      const itemIndex = this.tasks.findIndex((item) => item.id === id); // why error with filter on proxy
+      this.tasks.splice(itemIndex, 1);
     },
     clearedAll() {
-      this.tasks = []
+      this.tasks = [];
     },
     countDone() {
-      let count = 0
-      this.tasks.forEach(a => {
-        if(a.done) count++
-      })
-      return count
+      let count = 0;
+      this.tasks.forEach((a) => {
+        if (a.done) count++;
+      });
+      return count;
     },
     clearedDone() {
-              console.log(this.tasks[0])
-      const length =  this.tasks.length
+      console.log(this.tasks[0]);
+      const length = this.tasks.length;
       while (this.countDone()) {
-      for (let i = 0; i <= length; i++) {
-        const task = this.tasks[i]
-        if (task === undefined) break
-        console.log(this.tasks)
-        if(task.done) {
-          const itemIndex = this.tasks.findIndex(item => item.id === task.id); // why error with filter on proxy
-          this.tasks.splice(itemIndex, 1)
+        for (let i = 0; i <= length; i++) {
+          const task = this.tasks[i];
+          if (task === undefined) break;
+          console.log(this.tasks);
+          if (task.done) {
+            const itemIndex = this.tasks.findIndex(
+              (item) => item.id === task.id
+            ); // why error with filter on proxy
+            this.tasks.splice(itemIndex, 1);
+          }
         }
-      }
       }
     },
     doneUpdated(id, done) {
-      const itemIndex = this.tasks.findIndex(item => item.id === id);
-      this.tasks[itemIndex].done = done
+      const itemIndex = this.tasks.findIndex((item) => item.id === id);
+      this.tasks[itemIndex].done = done;
+    },
+    expandedTodo(id, expanded) {
+      this.tasks.forEach(a => {
+          if (a.id === id) a.expanded = !expanded
+          else a.expanded = false
+      })
     }
-  },
+  }
 };
 </script>
 
@@ -79,6 +88,7 @@ export default {
         :notes="task.notes"
         :date="task.date"
         :id="task.id"
+        :expanded="task.expanded"
         @delete-todo="todoDeleted"
         @edit-todo-text="
           (value) => {
@@ -86,6 +96,7 @@ export default {
           }
         "
         @update-done="doneUpdated"
+        @expand="expandedTodo"
       ></to-do-item>
     </li>
   </ul>
@@ -98,8 +109,11 @@ export default {
       placeholder="type in"
     />
   </div>
-  <to-do-footer class="footer" @clear-all="clearedAll" @clear-done="clearedDone"></to-do-footer>
-
+  <to-do-footer
+    class="footer"
+    @clear-all="clearedAll"
+    @clear-done="clearedDone"
+  ></to-do-footer>
 </template>
 
 <style></style>
