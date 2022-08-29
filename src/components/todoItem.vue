@@ -14,11 +14,11 @@
 
   <div class="hidden" v-if="expanded">
     <div class="leftHidden">
-      <textarea class="notes">{{ notes }}</textarea>
+      <textarea class="notes" @change="emitNotes" v-model="notes">{{ notes }}</textarea>
     </div>
     <div class="rightHidden">
-      <input type="date" class="date" :value="date" />
-      <select class="priority" :selectedIndex="priority">
+      <input type="date" class="date" v-model="date" @change="emitDate" />
+      <select class="priority" :selectedIndex="priority" v-model="priority" @change="emitPriority">
         <option>low</option>
         <option>medium</option>
         <option>high</option>
@@ -29,7 +29,7 @@
 </template>
 <script>
 export default {
-  emits: ["delete-todo", "edit-todo-text", "update-done", "expand"],
+  emits: ["delete-todo", "edit-todo-text", "update-done", "expand", "update-notes"],
   data() {
     return {
       todoContent: this.content,
@@ -42,7 +42,7 @@ export default {
   props: {
     content: { required: true, type: String },
     done: { default: false, type: Boolean },
-    priority: { default: 0, type: Number },
+    priority: { default: "low", type: String },
     notes: { default: "", type: String },
     date: { default: "", type: String },
     id: { required: true, type: String },
@@ -56,13 +56,22 @@ export default {
       this.$emit("delete-todo", this.id);
     },
     onTextEdit(event) {
-      const var1 = event.target.value;
-      this.todoContent = var1;
-      this.$emit("edit-todo-text", var1);
+      const newText = event.target.value;
+      this.todoContent = newText;
+      this.$emit("edit-todo-text", newText, this.id);
     },
     emitDone() {
-      this.$emit("update-done", this.id, this.done);
+      this.$emit("update-done", this.done, this.id);
     },
+    emitNotes() {
+      this.$emit("update-notes", this.notes, this.id);
+    },
+    emitDate() {
+      this.$emit("update-date", this.date, this.id);
+    },
+    emitPriority() {
+      this.$emit("update-priority", this.priority, this.id);
+    }
   },
 };
 </script>
