@@ -1,12 +1,7 @@
 <script>
 import ToDoItem from "./components/todoItem.vue";
 import ToDoFooter from "./components/todoFooter.vue";
-import {getAllTodosExport} from '../DB.js';
-import {insertTodoExport} from '../DB.js';
-import {updateTodoExport} from '../DB.js';
-import {deleteTodoExport} from '../DB.js';
-import {deleteAllExport} from '../DB.js';
-import {deleteDoneExport} from '../DB.js';
+import DatabaseCalls from '../DB.js';
 
 
 
@@ -33,7 +28,7 @@ export default {
           date: "",
           expanded: false
         }
-        const id = insertTodoExport(todo)
+        const id = DatabaseCalls.insertTodoExport(todo)
         todo.id = id
         this.tasks.push(todo);
         this.todoContent = "";
@@ -42,11 +37,11 @@ export default {
     todoDeleted(id) {
       const itemIndex = this.tasks.findIndex((item) => item._id === id);
       this.tasks.splice(itemIndex, 1);
-      deleteTodoExport(id)
+      DatabaseCalls.deleteTodoExport(id)
     },
     clearedAll() {
       this.tasks = [];
-      deleteAllExport()
+      DatabaseCalls.deleteAllExport()
     },
     countDone() {
       let count = 0;
@@ -69,12 +64,12 @@ export default {
           }
         }
       }
-      deleteDoneExport({'done': true})
+      DatabaseCalls.deleteDoneExport({'done': true})
     },
     doneUpdated(done, id) {
       const itemIndex = this.tasks.findIndex((item) => item._id === id);
       this.tasks[itemIndex].done = done;
-      updateTodoExport({'done': done}, this.tasks[itemIndex]._id)
+      DatabaseCalls.updateTodoExport({'done': done}, this.tasks[itemIndex]._id)
 
     },
     expandedTodo(id, expanded) {
@@ -84,28 +79,28 @@ export default {
       })
     },
     async updateTodosOnStart() {
-          const result = await getAllTodosExport()
+          const result = await DatabaseCalls.getAllTodosExport()
           this.tasks = result
     }, 
     updateContent(value, id) {
       const itemIndex = this.tasks.findIndex(item => item._id === id)
       this.tasks[itemIndex].content = value;
-      updateTodoExport({'content': value}, this.tasks[itemIndex]._id)
+      DatabaseCalls.updateTodoExport({'content': value}, this.tasks[itemIndex]._id)
     },
     notesUpdated(notes, id){
       const itemIndex = this.tasks.findIndex(item => item._id === id)
       this.tasks[itemIndex].notes = notes;
-      updateTodoExport({'notes': notes}, this.tasks[itemIndex]._id)
+      DatabaseCalls.updateTodoExport({'notes': notes}, this.tasks[itemIndex]._id)
     },
     dateUpdated(date, id){
       const itemIndex = this.tasks.findIndex(item => item._id === id)
       this.tasks[itemIndex].date = date;
-      updateTodoExport({'date': date}, this.tasks[itemIndex]._id)
+      DatabaseCalls.updateTodoExport({'date': date}, this.tasks[itemIndex]._id)
     },
     priorityUpdated(priority, id){
       const itemIndex = this.tasks.findIndex(item => item._id === id)
       this.tasks[itemIndex].priority = priority;
-      updateTodoExport({'priority': priority}, this.tasks[itemIndex]._id)
+      DatabaseCalls.updateTodoExport({'priority': priority}, this.tasks[itemIndex]._id)
     }
   }, mounted() {
     this.updateTodosOnStart()
