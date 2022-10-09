@@ -40,7 +40,7 @@ export default {
       }
     },
     todoDeleted(id) {
-      const itemIndex = this.tasks.findIndex((item) => item._id === id); // why error with filter on proxy
+      const itemIndex = this.tasks.findIndex((item) => item._id === id);
       this.tasks.splice(itemIndex, 1);
       deleteTodoExport(id)
     },

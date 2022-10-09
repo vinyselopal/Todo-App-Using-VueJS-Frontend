@@ -3,7 +3,7 @@
     <p class="savedTodo">
       <input
         type="text"
-        :class="{ /*taskCompletion: isDone(index),*/ todoContentBar: true }"
+        :class="{ todoContentBar: true }"
         @change="onTextEdit"
         v-model="content"
       />
